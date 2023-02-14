@@ -18,8 +18,6 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     quotes: ["error", "double"],
-    "@typescript-eslint/no-unused-vars": 1,
-    "no-undef": 1,
     "no-use-before-define": 1,
     "no-empty-function": 1,
     "no-empty": "off",
