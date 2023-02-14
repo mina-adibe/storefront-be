@@ -1,0 +1,14 @@
+{
+  "editor.fontSize": 14,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "editor.renderWhitespace": "all",
+  "editor.renderLineHighlight": "all",
+  "editor.cursorStyle": "line",
+  "editor.cursorBlinking": "solid",
+  "editor.cursorWidth": 2,
+  "editor.cursorSurroundingLines": 0,
+  "editor.lineNumbers": "on",
+  "editor.lineDecorationsWidth": 10,
+  "editor.matchBrackets": "always"
+}
