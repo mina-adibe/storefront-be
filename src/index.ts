@@ -4,11 +4,12 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import errorMiddleware from "./middleware/error";
 import Error from "./types/error.interface";
-// import Error from "./types/error.interface";
+
+import config from "./config";
 
 const app: Application = express();
 
-const PORT = 3000;
+const PORT = config.PORT || 3000;
 
 // add helmet to the app to protect against well-known vulnerabilities
 app.use(helmet());
