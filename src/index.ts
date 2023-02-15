@@ -1,7 +1,10 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+import errorMiddleware from "./middleware/error";
+import Error from "./types/error.interface";
+// import Error from "./types/error.interface";
 
 const app: Application = express();
 
@@ -30,6 +33,17 @@ app.use(limiter);
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Hello World" });
 });
+
+//  handel all invalids routes (operational error)
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
+  const err: Error = new Error(`can't find ${req.originalUrl}on this server!`);
+  err.status = "fail";
+  err.statusCode = 404;
+
+  next(err);
+});
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
