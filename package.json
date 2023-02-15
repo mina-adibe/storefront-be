@@ -10,6 +10,7 @@
     "build": "tsc",
     "start": "tsc && node dist/index.js",
     "test": "tsc && jasmine",
+    "migrate": "db-migrate up",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
@@ -44,6 +45,8 @@
     }
   },
   "dependencies": {
+    "db-migrate": "^0.11.13",
+    "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
