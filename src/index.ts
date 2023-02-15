@@ -4,12 +4,14 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import errorMiddleware from "./middleware/error";
 import Error from "./types/error.interface";
-
 import config from "./config";
+import db from "./database";
+
+//console.log("config", config);
 
 const app: Application = express();
 
-const PORT = config.PORT || 3000;
+const PORT = config.port || 3000;
 
 // add helmet to the app to protect against well-known vulnerabilities
 app.use(helmet());
@@ -31,8 +33,23 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+// test database connection
+
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Hello World" });
+});
+
+db.connect().then((client) => {
+  return client
+    .query("SELECT NOW()")
+    .then((res) => {
+      client.release();
+      console.log("res", res.rows);
+    })
+    .catch((err) => {
+      client.release();
+      console.log("err", err);
+    });
 });
 
 //  handel all invalids routes (operational error)
