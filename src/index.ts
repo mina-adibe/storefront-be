@@ -6,6 +6,7 @@ import errorMiddleware from "./middleware/error";
 import Error from "./types/error.interface";
 import config from "./config";
 import db from "./database";
+import routes from "./routes";
 
 //console.log("config", config);
 
@@ -35,9 +36,11 @@ app.use(limiter);
 
 // test database connection
 
-app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Hello World" });
-});
+app.use("/api/v1", routes);
+
+// app.get("/", (req: Request, res: Response) => {
+//   res.json({ message: "Hello World" });
+// });
 
 db.connect().then((client) => {
   return client
