@@ -20,7 +20,7 @@ app.use(helmet());
 // Add morgan to the app to log HTTP requests to the console
 app.use(morgan("combined"));
 
-// middleware to parse the body of the request
+// middleware to parse the body of the request - body-parser is deprecated in express 4.16.0 and above so we use express.json() instead
 app.use(express.json());
 
 // middleware to limit request rate
@@ -36,7 +36,7 @@ app.use(limiter);
 
 // test database connection
 
-app.use("/api/v1", routes);
+app.use("/api", routes);
 
 // app.get("/", (req: Request, res: Response) => {
 //   res.json({ message: "Hello World" });
@@ -47,7 +47,6 @@ db.connect().then((client) => {
     .query("SELECT NOW()")
     .then((res) => {
       client.release();
-      console.log("res", res.rows);
     })
     .catch((err) => {
       client.release();
@@ -64,6 +63,7 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next(err);
 });
 
+// global error handler middleware  (operational error)
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

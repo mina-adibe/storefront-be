@@ -6,6 +6,8 @@ const userModel = new UserModel();
 // TODO : user express-validator to validate user input
 
 // controller to create a user (controller is just  a function that takes in a request, response, and next function)
+// controller is a function to talk to the model and send the response back to the client
+// controller is follow mvc pattern (model view controller) and it's a layer between the model and the view (routes in our case)
 
 export const createUser = async (
   req: Request,
@@ -19,7 +21,7 @@ export const createUser = async (
       status: "success",
       message: "user created successfully",
       data: {
-        user,
+        ...user,
       },
     });
   } catch (error) {

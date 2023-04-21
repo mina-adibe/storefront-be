@@ -3,6 +3,8 @@ import * as controllers from "../../../controllers/user.controllers";
 
 const routes = Router();
 
+//TODO: use put or patch ?
+
 routes.post("/", controllers.createUser);
 routes.get("/", controllers.getUsers);
 routes.get("/:id", controllers.getUser);
