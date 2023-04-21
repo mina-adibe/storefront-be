@@ -1,8 +1,24 @@
+import config from "../config";
 import db from "../database";
+import Error from "../types/error.interface";
 import User from "../types/user";
+import bcrypt from "bcrypt";
+
+// steps :
+// open connection with DB
+// run query
+// release connection
+// return created user
+
+// create a hash password function
+const hashPassword = (password: string) => {
+  const salt = parseInt(config.saltRounds as string, 10);
+
+  return bcrypt.hashSync(`${password}${config.bcryptPass}`, salt);
+};
 
 class UserModel {
-  async createUser(user: User) {
+  async createUser(user: User): Promise<User> {
     try {
       const { email, user_name, first_name, last_name, password } = user;
       const connection = await db.connect();
@@ -13,14 +29,16 @@ class UserModel {
         user_name,
         first_name,
         last_name,
-        password,
+        hashPassword(password),
         new Date(),
       ];
       const result = await connection.query(sqlQuery, values);
       connection.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`unable create user: ${error}`);
+      throw new Error(
+        `unable create  (${user.user_name}) : ${(error as Error).message}`
+      );
     }
   }
 
@@ -58,7 +76,14 @@ class UserModel {
       const connection = await db.connect();
       const sqlQuery =
         "UPDATE users SET email=($1), user_name=($2), first_name=($3), last_name=($4), password=($5) WHERE id=($6) RETURNING id , email, user_name, first_name, last_name, created_at ";
-      const values = [email, user_name, first_name, last_name, password, id];
+      const values = [
+        email,
+        user_name,
+        first_name,
+        last_name,
+        hashPassword(password),
+        id,
+      ];
       const result = await connection.query(sqlQuery, values);
       connection.release();
       return result.rows[0];
