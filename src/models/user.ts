@@ -17,6 +17,12 @@ const hashPassword = (password: string) => {
   return bcrypt.hashSync(`${password}${config.bcryptPass}`, salt);
 };
 
+// create compare password function
+
+const comparePassword = (password: string, hashPassword: string): boolean => {
+  return bcrypt.compareSync(`${password}${config.bcryptPass}`, hashPassword);
+};
+
 class UserModel {
   async createUser(user: User): Promise<User> {
     try {
@@ -106,6 +112,31 @@ class UserModel {
   }
 
   // authenticate a user
+  async loginUser(email: string, password: string): Promise<User | null> {
+    try {
+      const connection = await db.connect();
+      const sqlQuery = "SELECT password FROM users WHERE email=($1)";
+      const result = await connection.query(sqlQuery, [email]);
+      if (result.rows.length) {
+        const user: User = result.rows[0];
+        const isPasswordValid = comparePassword(password, user.password);
+
+        if (isPasswordValid) {
+          const user = await connection.query(
+            "SELECT id , email, user_name, first_name, last_name, created_at FROM users WHERE email=($1)",
+            [email]
+          );
+          return user.rows[0];
+        }
+      }
+      connection.release();
+      return null;
+    } catch (error) {
+      throw new Error(
+        `unable authenticate user: ${(error as Error).message as string}`
+      );
+    }
+  }
 }
 
 export default UserModel;

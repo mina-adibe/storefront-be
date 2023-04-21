@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import UserModel from "../models/user";
+import jwt from "jsonwebtoken";
+import config from "../config";
 
 const userModel = new UserModel();
 
@@ -106,5 +108,43 @@ export const deleteUser = async (
     });
   } catch (error) {
     next(error);
+  }
+};
+
+// loginUser
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // extract the email and password from the request body
+    const { email, password } = req.body;
+
+    const user = await userModel.loginUser(email, password);
+    // generate a token using jwt
+    const token = jwt.sign({ user }, config.tokenSecret as string, {
+      expiresIn: "1h",
+    });
+    // if there is no user then return an error
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        message: "invalid email or password , try again",
+      });
+    }
+
+    // set the token in the response header
+    res.set("Authorization", `Bearer ${token}`);
+
+    return res.json({
+      status: "success",
+      message: "user logged in successfully",
+      data: {
+        ...user,
+      },
+    });
+  } catch (error) {
+    return next(error);
   }
 };

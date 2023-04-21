@@ -11,4 +11,7 @@ routes.get("/:id", controllers.getUser);
 routes.put("/:id", controllers.updateUser);
 routes.delete("/:id", controllers.deleteUser);
 
+// authentification
+routes.post("/login", controllers.loginUser);
+
 export default routes;
