@@ -31,6 +31,8 @@ All handlers and models are tested using Jasmine, and the project is written in 
   For Testing
   CREATE DATABASE store_test;
 - in root run : npm run migrate this will run this script : "db-migrate up".
+- Database default PORT=5432 for
+- express server default port is PORT=3000 for
 
 ## scripts
 
