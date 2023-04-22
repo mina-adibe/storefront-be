@@ -8,8 +8,11 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "npm run build  && node dist/index.js",
-    "test": "npm run build  && jasmine",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "start": "npm run clean && npm run build  && node dist/index.js",
+    "test": " npm run clean && npm run build  && npm run jasmine",
+    "jasmine": "jasmine",
     "migrate": "db-migrate up",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
