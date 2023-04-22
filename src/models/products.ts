@@ -52,6 +52,11 @@ export class ProductsModel {
       const result = await connection.query(sql, [id]);
       connection.release();
 
+      // check if product exist
+      if (result.rowCount === 0) {
+        throw new Error(`product with id (${id}) does not exist`);
+      }
+
       return result.rows[0];
     } catch (error) {
       throw new Error(
@@ -73,12 +78,16 @@ export class ProductsModel {
 
   // deleteProduct
 
-  // TODO: add typechecking for return type
   async deleteProduct(id: string) {
     try {
       const connection = await db.connect();
       const sql = "DELETE FROM products WHERE id = $1 RETURNING id ";
       const result = await connection.query(sql, [id]);
+      // validation for product exist
+
+      if (result.rowCount === 0) {
+        throw new Error(`product with id (${id}) does not exist`);
+      }
 
       connection.release();
 

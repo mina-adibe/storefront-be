@@ -42,6 +42,11 @@ export class OrdersModel {
       const connection = await db.connect();
       const sql = "SELECT * FROM orders WHERE id = $1";
       const result = await connection.query(sql, [id]);
+      // check if order exist
+      if (result.rowCount === 0) {
+        throw new Error(`order with id ${id} not found`);
+      }
+
       connection.release();
       return result.rows[0];
     } catch (error) {
@@ -57,6 +62,11 @@ export class OrdersModel {
       const connection = await db.connect();
       const sql = "DELETE FROM orders WHERE id = $1 RETURNING id ";
       const result = await connection.query(sql, [id]);
+      // check oder id exist
+      if (result.rowCount === 0) {
+        throw new Error(`order with id ${id} not found`);
+      }
+
       connection.release();
       return result.rows[0];
     } catch (error) {

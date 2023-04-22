@@ -13,6 +13,29 @@ export const createProduct = async (
   next: NextFunction
 ) => {
   try {
+    const { name, price, category } = req.body;
+
+    // Validate payload
+    if (!name || !price || !category) {
+      return res.status(400).json({
+        status: "error",
+        message: "Name, price, and category are required fields",
+      });
+    }
+
+    if (typeof name !== "string" || typeof category !== "string") {
+      return res.status(400).json({
+        status: "error",
+        message: "Name and category must be strings",
+      });
+    }
+    if (isNaN(parseFloat(price)) || !isFinite(price)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Price must be a number",
+      });
+    }
+
     const product = await productsModel.createProduct(req.body);
 
     res.json({
@@ -56,6 +79,18 @@ export const getProduct = async (
   next: NextFunction
 ) => {
   try {
+    const id = req.params.id;
+    if (!id) {
+      throw new Error("id is required");
+    }
+
+    if (isNaN(parseFloat(id)) || !isFinite(+id)) {
+      return res.status(400).json({
+        status: "error",
+        message: "id must be a number",
+      });
+    }
+
     const product = await productsModel.getProduct(
       req.params.id as unknown as string
     );
@@ -103,6 +138,18 @@ export const deleteProduct = async (
   next: NextFunction
 ) => {
   try {
+    const id = req.params.id;
+    if (!id) {
+      throw new Error("id is required");
+    }
+
+    if (isNaN(parseFloat(id)) || !isFinite(+id)) {
+      return res.status(400).json({
+        status: "error",
+        message: "id must be a number",
+      });
+    }
+
     const product = await productsModel.deleteProduct(
       req.params.id as unknown as string
     );

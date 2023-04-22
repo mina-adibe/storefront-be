@@ -65,6 +65,19 @@ export const getOrder = async (
   next: NextFunction
 ) => {
   try {
+    const id = req.params.id;
+
+    if (!id) {
+      throw new Error("id is required");
+    }
+
+    if (isNaN(parseFloat(id)) || !isFinite(+id)) {
+      return res.status(400).json({
+        status: "error",
+        message: "id must be a number",
+      });
+    }
+
     const order = await ordersModel.getOrder(
       req.params.id as unknown as string
     );
@@ -88,6 +101,19 @@ export const deleteOrder = async (
   next: NextFunction
 ) => {
   try {
+    const id = req.params.id;
+
+    if (!id) {
+      throw new Error("id is required");
+    }
+
+    if (isNaN(parseFloat(id)) || !isFinite(+id)) {
+      return res.status(400).json({
+        status: "error",
+        message: "id must be a number",
+      });
+    }
+
     const order = await ordersModel.deleteOrder(
       req.params.id as unknown as string
     );

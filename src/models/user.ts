@@ -55,6 +55,12 @@ class UserModel {
       const sqlQuery =
         "SELECT id , email, user_name, first_name, last_name, created_at FROM users WHERE id=($1)";
       const result = await connection.query(sqlQuery, [id]);
+      // check if user exist
+
+      if (result.rowCount === 0) {
+        throw new Error(`user with id ${id} not found`);
+      }
+
       connection.release();
       return result.rows[0];
     } catch (error) {
