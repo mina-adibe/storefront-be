@@ -75,8 +75,6 @@ export class OrdersModel {
       );
     }
   }
-
-  //updateOrde
 }
 
 export default OrdersModel;

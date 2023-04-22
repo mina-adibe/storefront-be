@@ -9,3 +9,6 @@ type User = {
 };
 
 export default User;
+
+export type UserWithoutId = Omit<User, "id">;
+export type UserWithouPass = Omit<User, "password">;

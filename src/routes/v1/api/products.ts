@@ -6,8 +6,8 @@ const routes = Router();
 
 // add all products routes here
 routes.post("/", authMiddleware, controllers.createProduct);
-routes.get("/", authMiddleware, controllers.getProducts);
-routes.get("/:id", authMiddleware, controllers.getProduct);
+routes.get("/", controllers.getProducts);
+routes.get("/:id", controllers.getProduct);
 routes.put("/:id", authMiddleware, controllers.updateProduct);
 routes.delete("/:id", authMiddleware, controllers.deleteProduct);
 
