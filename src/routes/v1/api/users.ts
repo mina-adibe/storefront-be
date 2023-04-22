@@ -6,7 +6,7 @@ const routes = Router();
 
 //TODO: use put or patch ?
 
-routes.post("/", authMiddleware, controllers.createUser);
+routes.post("/", controllers.createUser);
 routes.get("/", authMiddleware, controllers.getUsers);
 routes.get("/:id", authMiddleware, controllers.getUser);
 routes.put("/:id", authMiddleware, controllers.updateUser);

@@ -19,6 +19,12 @@ export const createUser = async (
   try {
     const user = await userModel.createUser(req.body);
 
+    const token = jwt.sign({ user }, config.tokenSecret as string, {
+      expiresIn: "24h",
+    });
+
+    res.set("Authorization", `Bearer ${token}`);
+
     res.json({
       status: "success",
       message: "user created successfully",
