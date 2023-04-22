@@ -124,7 +124,7 @@ export const loginUser = async (
     const user = await userModel.loginUser(email, password);
     // generate a token using jwt
     const token = jwt.sign({ user }, config.tokenSecret as string, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
     // if there is no user then return an error
     if (!user) {
