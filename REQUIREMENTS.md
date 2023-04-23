@@ -27,6 +27,13 @@ Stakeholders want an online storefront to showcase their products. You must buil
 - Create [token required] `'api/orders/' [POST] (token)`
 - Delete [token required] `'api/orders/:id' [DELETE] (token)`
 
+#### Orders products
+
+- Index [token required] `'api/order_products/' [GET] (token)`
+- Show [token required] `'api/order_products/:id' [GET] (token)`
+- Create [token required] `'api/order_products/' [POST] (token)`
+- Delete [token required] `'api/order_products/:id' [DELETE] (token)`
+
 ## Data schema
 
 #### Product
@@ -62,5 +69,16 @@ orders (
   status VARCHAR(50) DEFAULT 'active' CHECK (status IN ('active', 'completed')),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
   created_at  TIMESTAMP NOT NULL DEFAULT NOW()
+);
+```
+
+#### Order producrs
+
+```
+orders_products (
+   id SERIAL PRIMARY KEY,
+  order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0)
 );
 ```
